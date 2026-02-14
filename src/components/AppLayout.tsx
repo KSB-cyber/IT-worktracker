@@ -1,0 +1,28 @@
+import { useAuth } from '@/hooks/useAuth';
+import { Navigate, Outlet } from 'react-router-dom';
+import AppSidebar from '@/components/AppSidebar';
+
+export default function AppLayout() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-pulse-soft text-muted-foreground">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) return <Navigate to="/auth" replace />;
+
+  return (
+    <div className="flex min-h-screen bg-background">
+      <AppSidebar />
+      <main className="flex-1 overflow-auto">
+        <div className="p-6 lg:p-8 max-w-7xl mx-auto">
+          <Outlet />
+        </div>
+      </main>
+    </div>
+  );
+}
