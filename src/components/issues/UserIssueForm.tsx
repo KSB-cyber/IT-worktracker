@@ -14,12 +14,13 @@ import { format, parseISO } from 'date-fns';
 export default function UserIssueForm() {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [issues, setIssues] = useState<any[]>([]);
+  const [issues, setIssues] = useState<Array<Record<string, unknown>>>([]);
   const [form, setForm] = useState({ title: '', description: '', category: 'general', priority: 'medium' });
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (user) fetchIssues();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const fetchIssues = async () => {
@@ -50,7 +51,7 @@ export default function UserIssueForm() {
     setSubmitting(false);
   };
 
-  const downloadTicket = (issue: any) => {
+  const downloadTicket = (issue: Record<string, unknown>) => {
     const content = `
 ═══════════════════════════════════════
         E-TICKET - ISSUE RESOLVED

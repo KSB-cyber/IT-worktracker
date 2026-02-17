@@ -18,8 +18,8 @@ export default function AppLayout() {
   return (
     <div className="flex min-h-screen bg-background">
       <AppSidebar />
-      <main className="flex-1 overflow-auto">
-        <div className="p-6 lg:p-8 max-w-7xl mx-auto">
+      <main className="flex-1 overflow-auto w-full">
+        <div className="p-6 sm:p-8 lg:p-12 w-full">
           <Outlet />
         </div>
       </main>
