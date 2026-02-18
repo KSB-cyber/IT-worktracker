@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import AuthPage from "./pages/AuthPage";
 import AppLayout from "./components/AppLayout";
+import { InstallPrompt } from "./components/InstallPrompt";
 import Dashboard from "./pages/Dashboard";
 import InvoicesPage from "./pages/InvoicesPage";
 import IssuesPage from "./pages/IssuesPage";
@@ -21,6 +22,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <InstallPrompt />
       <BrowserRouter>
         <AuthProvider>
           <Routes>
