@@ -5,8 +5,19 @@ import { Button } from '@/components/ui/button';
 export const InstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showPrompt, setShowPrompt] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
 
   useEffect(() => {
+    // Check if already installed
+    const standalone = window.matchMedia('(display-mode: standalone)').matches;
+    setIsStandalone(standalone);
+
+    // Show prompt after 3 seconds if not installed
+    if (!standalone) {
+      const timer = setTimeout(() => setShowPrompt(true), 3000);
+      return () => clearTimeout(timer);
+    }
+
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
@@ -18,16 +29,20 @@ export const InstallPrompt = () => {
   }, []);
 
   const handleInstall = async () => {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      setShowPrompt(false);
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setShowPrompt(false);
+      }
+      setDeferredPrompt(null);
+    } else {
+      // Fallback: Show browser-specific instructions
+      alert('To install:\n\nChrome/Edge: Click the install icon in the address bar\niOS Safari: Tap Share > Add to Home Screen\nAndroid: Tap menu > Install app');
     }
-    setDeferredPrompt(null);
   };
 
-  if (!showPrompt) return null;
+  if (!showPrompt || isStandalone) return null;
 
   return (
     <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 bg-white dark:bg-gray-800 border rounded-lg shadow-lg p-4 z-50 animate-in slide-in-from-bottom">
