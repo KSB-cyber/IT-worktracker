@@ -4,7 +4,6 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
 
-// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
@@ -13,32 +12,41 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
+
   plugins: [
     react(),
     mode === "development" && componentTagger(),
     VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['logo.jpeg'],
+      registerType: "autoUpdate",
+      injectRegister: "auto",
+      includeAssets: ["logo.jpeg"],
       manifest: {
-        name: 'TOPP Clubhouse IT Tracker',
-        short_name: 'IT Tracker',
-        description: 'Invoice and Issue Management System',
-        theme_color: '#ffffff',
+        name: "TOPP Clubhouse IT Tracker",
+        short_name: "IT Tracker",
+        description: "Invoice and Issue Management System",
+        theme_color: "#ffffff",
+        background_color: "#ffffff",
+        display: "standalone",
+        start_url: "/",
         icons: [
           {
-            src: '/logo.jpeg',
-            sizes: '192x192',
-            type: 'image/jpeg'
+            src: "/icon-192.png",
+            sizes: "192x192",
+            type: "image/png",
           },
           {
-            src: '/logo.jpeg',
-            sizes: '512x512',
-            type: 'image/jpeg'
-          }
-        ]
-      }
-    })
+            src: "/icon-512.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
+        ],
+      },
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,png,jpg,jpeg,svg}"],
+      },
+    }),
   ].filter(Boolean),
+
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
